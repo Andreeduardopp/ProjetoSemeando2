@@ -6,6 +6,11 @@ class Categoria(models.Model):
     nome = models.CharField(max_length=255)
     def __str__(self) -> str:
         return self.nome
+    
+def get_upload_path_evento(instance, filename):
+    if not instance.id:
+        return f'projetoSemeando/evento/{filename}'
+    return f'evento/{instance.id}/{filename}'
 
 class Evento(models.Model):
     titulo = models.CharField(max_length=255)
@@ -15,7 +20,7 @@ class Evento(models.Model):
     descricao = models.TextField()
     valor_entrada = models.DecimalField(max_digits=10, decimal_places=2)
     data_postagem = models.DateField(auto_now_add=True , null=True, blank=True)
-    foto_principal = models.ImageField(upload_to='media/', blank=True, null=True)
+    foto_principal = models.ImageField(upload_to=get_upload_path_evento, blank=True, null=True)
     cep = models.CharField(max_length=8)
     rua = models.CharField(max_length=255, null=True, blank=True)
     numero = models.CharField(max_length=8)
